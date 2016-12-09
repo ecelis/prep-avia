@@ -29,6 +29,10 @@ def _setGuiTheme(self, theme = 'dark'):
     else:
         self.setStyleSheet(qdarkstyle.load_stylesheet(pyside = False))
 
+def _baseLayout(self):
+    self.baseLayout = QtGui.QHBoxLayout()
+    self.baseLayout.setObjectName("baseLayout")
+
 def _initGui(self):
     """Initialize PatitoPro GUI"""
     _setGuiTheme(self)

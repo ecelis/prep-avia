@@ -44,12 +44,62 @@ class PPPMainWindow(QtGui.QMainWindow):
     def createUI(self):
         """Set up the user interface, signals & slots
         """
-        self.vlcplayer = QtGui.QWidget(self)
-        self.propertiesPanel = QtGui.QDockWidget(self)
-        self.setCentralWidget(self.vlcplayer)
+        #self.propertiesPanel = QtGui.QDockWidget(self)
+        #self.setCentralWidget(self.vlcplayer)
+        #self.setCentralWidget(self.vlcplayer)
         # Get the main video frame
         self.videoframe = gui._getVideoWidget()
+        self.vlcp()
+        self.menu()
+        self.toolBar()
+        self.statusBar()
 
+        self.timer = QtCore.QTimer(self)
+        self.timer.setInterval(200)
+        self.connect(self.timer, QtCore.SIGNAL("timeout()"),
+                     self.updateUI)
+
+
+        #self.horizontalLayout_2.addLayout(self.baseLayout)
+        #MainWindow.setCentralWidget(self.centralwidget)
+
+    def menu(self):
+        self.open = QtGui.QAction(QtGui.QIcon(ico.OPEN_PROJECT),
+                txt.OPEN_PROJECT, self)
+        self.open.setShortcut("Ctrl+O")
+        self.connect(self.open, QtCore.SIGNAL("triggered()"), self.OpenFile)
+        exit = QtGui.QAction("&Exit", self)
+        exit.setShortcut("Ctrl+Q")
+        self.connect(exit, QtCore.SIGNAL("triggered()"), sys.exit)
+        menubar = self.menuBar()
+        filemenu = menubar.addMenu("&File")
+        filemenu.addAction(self.open)
+        filemenu.addSeparator()
+        filemenu.addAction(exit)
+
+    def toolBar(self):
+        self.toolbar = self.addToolBar(txt.OPEN_PROJECT)
+        self.toolbar.addAction(self.open)
+
+    def statusBar(self):
+        self.statusbar = QtGui.QStatusBar(self)
+        self.statusbar.setObjectName("statusbar")
+        self.setStatusBar(self.statusbar)
+
+    def explorerWidget(self):
+        """File and project explorer dock panel"""
+        self.ExplorerWidget = QtGui.QDockWidget(self)
+        self.ExplorerWidget.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
+        self.ExplorerWidget.setObjectName("ExplorerWidget")
+        self.dockWidgetContents = QtGui.QWidget()
+        self.dockWidgetContents.setObjectName("dockWidgetContents")
+        self.ExplorerWidget.setWidget(self.dockWidgetContents)
+        self.addDockWidget(QtCore.Qt.DockWidgetArea(1),
+                self.ExplorerWidget)
+
+    def vlcp(self):
+        """Create the main vlc player widget"""
+        self.vlcplayer = QtGui.QWidget(self)
         # Player Controls
         ps_config = dict(orientation = QtCore.Qt.Horizontal,
                 tooltip = 'Position', max = 1000)
@@ -60,54 +110,32 @@ class PPPMainWindow(QtGui.QMainWindow):
         self.playbutton = gui._getButton({'label':txt.PLAY})
         self.stopbutton = gui._getButton({"label":txt.STOP})
 
-        self.hbuttonbox = QtGui.QHBoxLayout()
-        self.hbuttonbox.addWidget(self.playbutton)
+        self.vlc_controls = QtGui.QHBoxLayout()
+        self.vlc_controls.addWidget(self.playbutton)
         self.connect(self.playbutton, QtCore.SIGNAL("clicked()"),
                      self.PlayPause)
-        self.hbuttonbox.addWidget(self.stopbutton)
+        self.vlc_controls.addWidget(self.stopbutton)
         self.connect(self.stopbutton, QtCore.SIGNAL("clicked()"),
                      self.Stop)
 
-        self.hbuttonbox.addStretch(1)
+        self.vlc_controls.addStretch(1)
         self.volumeslider = gui._getSliderWidget(self,
                 {'orientation':QtCore.Qt.Horizontal,
                 'tooltip':'Volume',
                 'max':100})
         self.volumeslider.setValue(self.mediaplayer.audio_get_volume())
-        self.hbuttonbox.addWidget(self.volumeslider)
+        self.vlc_controls.addWidget(self.volumeslider)
         self.connect(self.volumeslider,
                      QtCore.SIGNAL("valueChanged(int)"),
                      self.setVolume)
 
-        self.vboxlayout = QtGui.QVBoxLayout()
-        #self.vboxlayout.addWidget(self.propertiesPanel)
-        self.vboxlayout.addWidget(self.videoframe)
-        self.vboxlayout.addWidget(self.positionslider)
-        self.vboxlayout.addLayout(self.hbuttonbox)
+        self.vlc_layout = QtGui.QVBoxLayout()
+        self.vlc_layout.addWidget(self.videoframe)
+        self.vlc_layout.addWidget(self.positionslider)
+        self.vlc_layout.addLayout(self.vlc_controls)
 
-        self.vlcplayer.setLayout(self.vboxlayout)
+        self.vlcplayer.setLayout(self.vlc_layout)
 
-        open = QtGui.QAction(QtGui.QIcon(ico.OPEN_PROJECT),
-                txt.OPEN_PROJECT, self)
-        open.setShortcut("Ctrl+O")
-        self.connect(open, QtCore.SIGNAL("triggered()"), self.OpenFile)
-        exit = QtGui.QAction("&Exit", self)
-        exit.setShortcut("Ctrl+Q")
-        self.connect(exit, QtCore.SIGNAL("triggered()"), sys.exit)
-        menubar = self.menuBar()
-        filemenu = menubar.addMenu("&File")
-        filemenu.addAction(open)
-        filemenu.addSeparator()
-        filemenu.addAction(exit)
-
-        self.timer = QtCore.QTimer(self)
-        self.timer.setInterval(200)
-        self.connect(self.timer, QtCore.SIGNAL("timeout()"),
-                     self.updateUI)
-
-        self.toolBar = self.addToolBar(txt.OPEN_PROJECT)
-        self.toolBar.addAction(open)
-        self.statusBar()
 
     def PlayPause(self):
         """Toggle play/pause status
