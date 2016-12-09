@@ -33,3 +33,8 @@ def _initGui(self):
     _setGuiTheme(self)
     self.setWindowTitle(txt.APP_TITLE)
     self.setWindowIcon(QtGui.QIcon(ico.PPP))
+
+def _setFont(self, target, style):
+    pass
+
+
