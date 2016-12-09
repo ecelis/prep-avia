@@ -47,48 +47,40 @@ class PPPMainWindow(QtGui.QMainWindow):
         self.vlcplayer = QtGui.QWidget(self)
         self.propertiesPanel = QtGui.QDockWidget(self)
         self.setCentralWidget(self.vlcplayer)
+        # Get the main video frame
+        self.videoframe = gui._getVideoWidget()
 
-        # In this widget, the video will be drawn
-        if sys.platform == "darwin": # for MacOS
-            self.videoframe = QtGui.QMacCocoaViewContainer(0)
-        else:
-            self.videoframe = QtGui.QFrame()
-        self.palette = self.videoframe.palette()
-        self.palette.setColor (QtGui.QPalette.Window,
-                               QtGui.QColor(0,0,0))
-        self.videoframe.setPalette(self.palette)
-        self.videoframe.setAutoFillBackground(True)
-
-        self.positionslider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        self.positionslider.setToolTip("Position")
-        self.positionslider.setMaximum(1000)
+        # Player Controls
+        ps_config = dict(orientation = QtCore.Qt.Horizontal,
+                tooltip = 'Position', max = 1000)
+        self.positionslider = gui._getSliderWidget(self, ps_config)
         self.connect(self.positionslider,
                      QtCore.SIGNAL("sliderMoved(int)"), self.setPosition)
 
+        self.playbutton = gui._getButton({'label':txt.PLAY})
+        self.stopbutton = gui._getButton({"label":txt.STOP})
+
         self.hbuttonbox = QtGui.QHBoxLayout()
-        self.playbutton = QtGui.QPushButton(txt.PLAY)
-        self.playbutton.resize(self.playbutton.minimumSizeHint())
         self.hbuttonbox.addWidget(self.playbutton)
         self.connect(self.playbutton, QtCore.SIGNAL("clicked()"),
                      self.PlayPause)
-
-        self.stopbutton = QtGui.QPushButton("Stop")
         self.hbuttonbox.addWidget(self.stopbutton)
         self.connect(self.stopbutton, QtCore.SIGNAL("clicked()"),
                      self.Stop)
 
         self.hbuttonbox.addStretch(1)
-        self.volumeslider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        self.volumeslider.setMaximum(100)
+        self.volumeslider = gui._getSliderWidget(self,
+                {'orientation':QtCore.Qt.Horizontal,
+                'tooltip':'Volume',
+                'max':100})
         self.volumeslider.setValue(self.mediaplayer.audio_get_volume())
-        self.volumeslider.setToolTip("Volume")
         self.hbuttonbox.addWidget(self.volumeslider)
         self.connect(self.volumeslider,
                      QtCore.SIGNAL("valueChanged(int)"),
                      self.setVolume)
 
         self.vboxlayout = QtGui.QVBoxLayout()
-        self.vboxlayout.addWidget(self.propertiesPanel)
+        #self.vboxlayout.addWidget(self.propertiesPanel)
         self.vboxlayout.addWidget(self.videoframe)
         self.vboxlayout.addWidget(self.positionslider)
         self.vboxlayout.addLayout(self.hbuttonbox)

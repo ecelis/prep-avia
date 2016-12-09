@@ -17,6 +17,7 @@
 ##     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import sys
 import qdarkstyle
 import txt, ico
 from PyQt4 import Qt, QtGui, QtCore
@@ -36,5 +37,33 @@ def _initGui(self):
 
 def _setFont(self, target, style):
     pass
+
+def _getVideoWidget():
+    """In this widget, the video will be drawn"""
+    videoframe = None
+    if sys.platform == "darwin": # for MacOS
+        videoframe = QtGui.QMacCocoaViewContainer(0)
+    else:
+        videoframe = QtGui.QFrame()
+
+    palette = videoframe.palette()
+    palette.setColor (QtGui.QPalette.Window,
+                               QtGui.QColor(0,0,0))
+    videoframe.setPalette(palette)
+    videoframe.setAutoFillBackground(True)
+
+    return videoframe
+
+def _getSliderWidget(self, options):
+    """Returns a slider"""
+    slider = QtGui.QSlider(options['orientation'], self)
+    slider.setToolTip(options['tooltip'])
+    slider.setMaximum(options['max'])
+    return slider
+
+def _getButton(options):
+    button = QtGui.QPushButton(options['label'])
+    button.resize(button.minimumSizeHint())
+    return button
 
 

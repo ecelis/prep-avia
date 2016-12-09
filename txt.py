@@ -20,3 +20,4 @@
 APP_TITLE = 'Prep - PatitoPro'
 PLAY = "Play"
 OPEN_PROJECT = "&Open"
+STOP = "Stop"
