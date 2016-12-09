@@ -20,16 +20,17 @@
 import sys
 import os.path
 from vendor import vlc
-from PyQt4 import QtGui, QtCore
+from PyQt4 import Qt, QtGui, QtCore
 
-from txt import txt
+import txt
 
 class APMainWindow(QtGui.QMainWindow):
     """A simple Media Player using VLC and Qt
     """
     def __init__(self, master=None):
+        super(APMainWindow, self).__init__()
         QtGui.QMainWindow.__init__(self, master)
-        self.setWindowTitle(txt['AppTitle'])
+        self.setWindowTitle(txt.APP_TITLE)
 
         # creating a basic vlc instance
         self.instance = vlc.Instance()
@@ -43,6 +44,7 @@ class APMainWindow(QtGui.QMainWindow):
         """Set up the user interface, signals & slots
         """
         self.vlcplayer = QtGui.QWidget(self)
+        self.propertiesPanel = QtGui.QDockWidget(self)
         self.setCentralWidget(self.vlcplayer)
 
         # In this widget, the video will be drawn
@@ -84,6 +86,7 @@ class APMainWindow(QtGui.QMainWindow):
                      self.setVolume)
 
         self.vboxlayout = QtGui.QVBoxLayout()
+        self.vboxlayout.addWidget(self.propertiesPanel)
         self.vboxlayout.addWidget(self.videoframe)
         self.vboxlayout.addWidget(self.positionslider)
         self.vboxlayout.addLayout(self.hbuttonbox)
@@ -188,6 +191,7 @@ class APMainWindow(QtGui.QMainWindow):
                 # "Pause", not the desired behavior of a media player
                 # this will fix it
                 self.Stop()
+
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

@@ -17,4 +17,5 @@
 ##     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-txt = {'AppTitle':u'AViA Prep'}
+APP_TITLE = 'Prep - PatitoPro'
+APP_ICON = 'gui/assets/img/icon.png'
