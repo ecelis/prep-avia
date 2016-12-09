@@ -37,31 +37,25 @@ class PPPMainWindow(QtGui.QMainWindow):
         self.instance = vlc.Instance()
         # creating an empty vlc media player
         self.mediaplayer = self.instance.media_player_new()
-        
         self.createUI()
         self.isPaused = False
 
     def createUI(self):
         """Set up the user interface, signals & slots
         """
-        #self.propertiesPanel = QtGui.QDockWidget(self)
-        #self.setCentralWidget(self.vlcplayer)
-        #self.setCentralWidget(self.vlcplayer)
-        # Get the main video frame
         self.videoframe = gui._getVideoWidget()
-        self.vlcp()
         self.menu()
         self.toolBar()
         self.statusBar()
+        self.vlcp()
+        self.explorerWidget()
+        self.propertiesWidget()
+        self.setCentralWidget(self.vlcplayer)
 
         self.timer = QtCore.QTimer(self)
         self.timer.setInterval(200)
         self.connect(self.timer, QtCore.SIGNAL("timeout()"),
                      self.updateUI)
-
-
-        #self.horizontalLayout_2.addLayout(self.baseLayout)
-        #MainWindow.setCentralWidget(self.centralwidget)
 
     def menu(self):
         self.open = QtGui.QAction(QtGui.QIcon(ico.OPEN_PROJECT),
@@ -88,14 +82,25 @@ class PPPMainWindow(QtGui.QMainWindow):
 
     def explorerWidget(self):
         """File and project explorer dock panel"""
-        self.ExplorerWidget = QtGui.QDockWidget(self)
-        self.ExplorerWidget.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
-        self.ExplorerWidget.setObjectName("ExplorerWidget")
+        self.explorer = QtGui.QDockWidget(self)
+        self.explorer.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
+        self.explorer.setObjectName("explorer")
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
-        self.ExplorerWidget.setWidget(self.dockWidgetContents)
+        self.explorer.setWidget(self.dockWidgetContents)
         self.addDockWidget(QtCore.Qt.DockWidgetArea(1),
-                self.ExplorerWidget)
+                self.explorer)
+
+    def propertiesWidget(self):
+        self.properties = QtGui.QDockWidget(self)
+        self.properties.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+        self.properties.setObjectName("PropertiesWidget")
+        self.propertiesContent = QtGui.QWidget()
+        self.propertiesContent.setObjectName("propertiesContent")
+        self.properties.setWidget(self.propertiesContent)
+        self.addDockWidget(QtCore.Qt.DockWidgetArea(2),
+                self.properties)
+
 
     def vlcp(self):
         """Create the main vlc player widget"""
@@ -129,10 +134,13 @@ class PPPMainWindow(QtGui.QMainWindow):
                      QtCore.SIGNAL("valueChanged(int)"),
                      self.setVolume)
 
+        self.timeline = gui._getTimeLine()
+
         self.vlc_layout = QtGui.QVBoxLayout()
         self.vlc_layout.addWidget(self.videoframe)
         self.vlc_layout.addWidget(self.positionslider)
         self.vlc_layout.addLayout(self.vlc_controls)
+        self.vlc_layout.addWidget(self.timeline)
 
         self.vlcplayer.setLayout(self.vlc_layout)
 

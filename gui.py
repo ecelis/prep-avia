@@ -59,6 +59,14 @@ def _getVideoWidget():
 
     return videoframe
 
+def _getTimeLine():
+    if sys.platform == "darwin":
+        timeline = QtGui.QMacCocoaViewContainer(0)
+    else:
+        timeline = QtGui.QFrame()
+
+    return timeline
+
 def _getSliderWidget(self, options):
     """Returns a slider"""
     slider = QtGui.QSlider(options['orientation'], self)
