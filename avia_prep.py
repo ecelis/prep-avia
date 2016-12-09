@@ -24,13 +24,14 @@ from PyQt4 import Qt, QtGui, QtCore
 
 import txt
 
-class APMainWindow(QtGui.QMainWindow):
+class PPPMainWindow(QtGui.QMainWindow):
     """A simple Media Player using VLC and Qt
     """
     def __init__(self, master=None):
-        super(APMainWindow, self).__init__()
+        super(PPPMainWindow, self).__init__()
         QtGui.QMainWindow.__init__(self, master)
         self.setWindowTitle(txt.APP_TITLE)
+        self.setWindowIcon(QtGui.QIcon(txt.APP_ICON))
 
         # creating a basic vlc instance
         self.instance = vlc.Instance()
@@ -195,9 +196,9 @@ class APMainWindow(QtGui.QMainWindow):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    apGui = APMainWindow()
-    apGui.show()
-    apGui.resize(640, 480)
+    ppp = PPPMainWindow()
+    ppp.show()
+    ppp.resize(640, 480)
     if sys.argv[1:]:
-        apGui.OpenFile(sys.argv[1])
+        ppp.OpenFile(sys.argv[1])
     sys.exit(app.exec_())
