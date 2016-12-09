@@ -37,7 +37,7 @@ class PPPMainWindow(QtGui.QMainWindow):
         self.instance = vlc.Instance()
         # creating an empty vlc media player
         self.mediaplayer = self.instance.media_player_new()
-
+        
         self.createUI()
         self.isPaused = False
 
