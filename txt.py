@@ -18,4 +18,5 @@
 ##
 
 APP_TITLE = 'Prep - PatitoPro'
-APP_ICON = 'gui/assets/img/icon.png'
+PLAY = "Play"
+OPEN_PROJECT = "&Open"

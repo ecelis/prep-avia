@@ -23,6 +23,7 @@ from vendor import vlc
 from PyQt4 import Qt, QtGui, QtCore
 
 import txt
+import ico
 
 class PPPMainWindow(QtGui.QMainWindow):
     """A simple Media Player using VLC and Qt
@@ -31,7 +32,7 @@ class PPPMainWindow(QtGui.QMainWindow):
         super(PPPMainWindow, self).__init__()
         QtGui.QMainWindow.__init__(self, master)
         self.setWindowTitle(txt.APP_TITLE)
-        self.setWindowIcon(QtGui.QIcon(txt.APP_ICON))
+        self.setWindowIcon(QtGui.QIcon(ico.PPP))
 
         # creating a basic vlc instance
         self.instance = vlc.Instance()
@@ -66,7 +67,8 @@ class PPPMainWindow(QtGui.QMainWindow):
                      QtCore.SIGNAL("sliderMoved(int)"), self.setPosition)
 
         self.hbuttonbox = QtGui.QHBoxLayout()
-        self.playbutton = QtGui.QPushButton("Play")
+        self.playbutton = QtGui.QPushButton(txt.PLAY)
+        self.playbutton.resize(self.playbutton.minimumSizeHint())
         self.hbuttonbox.addWidget(self.playbutton)
         self.connect(self.playbutton, QtCore.SIGNAL("clicked()"),
                      self.PlayPause)
@@ -94,9 +96,12 @@ class PPPMainWindow(QtGui.QMainWindow):
 
         self.vlcplayer.setLayout(self.vboxlayout)
 
-        open = QtGui.QAction("&Open", self)
+        open = QtGui.QAction(QtGui.QIcon(ico.OPEN_PROJECT),
+                txt.OPEN_PROJECT, self)
+        open.setShortcut("Ctrl+O")
         self.connect(open, QtCore.SIGNAL("triggered()"), self.OpenFile)
         exit = QtGui.QAction("&Exit", self)
+        exit.setShortcut("Ctrl+Q")
         self.connect(exit, QtCore.SIGNAL("triggered()"), sys.exit)
         menubar = self.menuBar()
         filemenu = menubar.addMenu("&File")
@@ -108,6 +113,10 @@ class PPPMainWindow(QtGui.QMainWindow):
         self.timer.setInterval(200)
         self.connect(self.timer, QtCore.SIGNAL("timeout()"),
                      self.updateUI)
+
+        self.toolBar = self.addToolBar(txt.OPEN_PROJECT)
+        self.toolBar.addAction(open)
+        self.statusBar()
 
     def PlayPause(self):
         """Toggle play/pause status
@@ -135,7 +144,8 @@ class PPPMainWindow(QtGui.QMainWindow):
         """Open a media file in a MediaPlayer
         """
         if filename is None:
-            filename = QtGui.QFileDialog.getOpenFileName(self, "Open File", os.path.expanduser('~'))
+            filename = QtGui.QFileDialog.getOpenFileName(self,
+                    "Open File", os.path.expanduser('~'))
         if not filename:
             return
 
