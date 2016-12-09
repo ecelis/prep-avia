@@ -24,6 +24,7 @@ from PyQt4 import Qt, QtGui, QtCore
 
 import txt
 import ico
+import gui
 
 class PPPMainWindow(QtGui.QMainWindow):
     """A simple Media Player using VLC and Qt
@@ -31,9 +32,7 @@ class PPPMainWindow(QtGui.QMainWindow):
     def __init__(self, master=None):
         super(PPPMainWindow, self).__init__()
         QtGui.QMainWindow.__init__(self, master)
-        self.setWindowTitle(txt.APP_TITLE)
-        self.setWindowIcon(QtGui.QIcon(ico.PPP))
-
+        gui._initGui(self)
         # creating a basic vlc instance
         self.instance = vlc.Instance()
         # creating an empty vlc media player
