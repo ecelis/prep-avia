@@ -106,12 +106,13 @@ class PPPMainWindow(QtGui.QMainWindow):
         self.explorer = QtGui.QDockWidget(self)
         self.explorer.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
         self.explorer.setObjectName(_fromUtf8("explorer"))
-        self.dockWidgetContents = QtGui.QWidget()
-        self.dockWidgetContents.setObjectName(
-                _fromUtf8("dockWidgetContents"))
-        self.explorer.setWidget(self.dockWidgetContents)
+        self.explorerContents = QtGui.QWidget()
+        self.explorerContents.setObjectName(
+                _fromUtf8("explorerContents"))
+        self.explorer.setWidget(self.explorerContents)
         self.addDockWidget(QtCore.Qt.DockWidgetArea(1),
                 self.explorer)
+        gui._explorerLayout(self)
 
     def propertiesWidget(self):
         self.properties = QtGui.QDockWidget(self)

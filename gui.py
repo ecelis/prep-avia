@@ -52,14 +52,29 @@ def _baseLayout(self):
 def _explorerLayout(self):
     self.explorerLayout = QtGui.QVBoxLayout()
     self.explorerLayout.setObjectName(_fromUtf8("explorerLayout"))
-    self.fileBrowser = QtGui.QTreeView(self.dockWidgetContents)
+    self.fileBrowser = QtGui.QTreeView(self.explorerContents)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
-            QtGui.QSizePolicy,Minimum)
+            QtGui.QSizePolicy.Minimum)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(
             self.fileBrowser.sizePolicy().hasHeightForWidth())
     self.fileBrowser.setSizePolicy(sizePolicy)
+    self.projectClips = QtGui.QScrollArea(self.explorerContents)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
+            QtGui.QSizePolicy.Minimum)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(
+            self.projectClips.sizePolicy().hasHeightForWidth())
+    self.projectClips.setSizePolicy(sizePolicy)
+    self.projectClips.setWidgetResizable(True)
+    self.projectClips.setObjectName(_fromUtf8("projectClips"))
+    self.scrollAreaWidgetContents = QtGui.QWidget()
+    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 253, 254))
+    self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
+    self.projectClips.setWidget(self.scrollAreaWidgetContents)
+    self.explorerLayout.addWidget(self.projectClips)
 
 
 def _initGui(self):
