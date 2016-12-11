@@ -41,14 +41,14 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 
-class PPPMainWindow(QtGui.QMainWindow):
+class MainWindow(QtGui.QMainWindow):
     """A simple Media Player using VLC and Qt
     """
     def __init__(self, master=None):
-        super(PPPMainWindow, self).__init__()
+        super(MainWindow, self).__init__()
         QtGui.QMainWindow.__init__(self, master)
         gui._initGui(self)
-        # creating a basic vlc instance
+        # creating a basic vlc instansce
         self.instance = vlc.Instance()
         # creating an empty vlc media player
         self.mediaplayer = self.instance.media_player_new()
@@ -257,7 +257,7 @@ class PPPMainWindow(QtGui.QMainWindow):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    ppp = PPPMainWindow()
+    ppp = MainWindow()
     ppp.show()
     ppp.resize(640, 480)
     if sys.argv[1:]:
