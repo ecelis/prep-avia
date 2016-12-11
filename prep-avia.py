@@ -23,8 +23,8 @@ from vlc import vlc
 from PyQt4 import Qt, QtGui, QtCore
 
 from txt import txt
-import ico
-import gui
+from gui import ico, gui
+#from gui import gui
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
