@@ -19,7 +19,7 @@
 
 import sys
 import os.path
-from vendor import vlc
+from vlc import vlc
 from PyQt4 import Qt, QtGui, QtCore
 
 import txt
