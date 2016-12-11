@@ -136,11 +136,12 @@ class PPPMainWindow(QtGui.QMainWindow):
 
         self.timeline = gui._getTimeLine()
 
+
         self.vlc_layout = QtGui.QVBoxLayout()
         self.vlc_layout.addWidget(self.videoframe)
         self.vlc_layout.addWidget(self.positionslider)
         self.vlc_layout.addLayout(self.vlc_controls)
-        self.vlc_layout.addWidget(self.timeline)
+        #self.vlc_layout.addWidget(self.timeline)
 
         self.vlcplayer.setLayout(self.vlc_layout)
 

@@ -63,7 +63,10 @@ def _getTimeLine():
     if sys.platform == "darwin":
         timeline = QtGui.QMacCocoaViewContainer(0)
     else:
-        timeline = QtGui.QFrame()
+        timeline = QtGui.QScrollArea()
+        timeline.setFrameStyle(QtGui.QFrame.StyledPanel)
+        timeline.setFrameStyle(QtGui.QFrame.Sunken)
+        timeline.setGeometry(QtCore.QRect(0,0,200,200))
 
     return timeline
 
