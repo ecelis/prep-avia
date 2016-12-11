@@ -26,6 +26,21 @@ import txt
 import ico
 import gui
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+
 class PPPMainWindow(QtGui.QMainWindow):
     """A simple Media Player using VLC and Qt
     """
@@ -72,21 +87,28 @@ class PPPMainWindow(QtGui.QMainWindow):
         filemenu.addAction(exit)
 
     def toolBar(self):
-        self.toolbar = self.addToolBar(txt.OPEN_PROJECT)
+        self.toolbar = self.addToolBar(_fromUtf8(txt.OPEN_PROJECT))
         self.toolbar.addAction(self.open)
 
     def statusBar(self):
         self.statusbar = QtGui.QStatusBar(self)
-        self.statusbar.setObjectName("statusbar")
+        self.statusbar.setObjectName(_fromUtf8("statusbar"))
         self.setStatusBar(self.statusbar)
+
+    def fileBrowser(self):
+        pass
+
+    def projectClips(self):
+        pass
 
     def explorerWidget(self):
         """File and project explorer dock panel"""
         self.explorer = QtGui.QDockWidget(self)
         self.explorer.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
-        self.explorer.setObjectName("explorer")
+        self.explorer.setObjectName(_fromUtf8("explorer"))
         self.dockWidgetContents = QtGui.QWidget()
-        self.dockWidgetContents.setObjectName("dockWidgetContents")
+        self.dockWidgetContents.setObjectName(
+                _fromUtf8("dockWidgetContents"))
         self.explorer.setWidget(self.dockWidgetContents)
         self.addDockWidget(QtCore.Qt.DockWidgetArea(1),
                 self.explorer)
@@ -94,9 +116,9 @@ class PPPMainWindow(QtGui.QMainWindow):
     def propertiesWidget(self):
         self.properties = QtGui.QDockWidget(self)
         self.properties.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
-        self.properties.setObjectName("PropertiesWidget")
+        self.properties.setObjectName(_fromUtf8("PropertiesWidget"))
         self.propertiesContent = QtGui.QWidget()
-        self.propertiesContent.setObjectName("propertiesContent")
+        self.propertiesContent.setObjectName(_fromUtf8("propertiesContent"))
         self.properties.setWidget(self.propertiesContent)
         self.addDockWidget(QtCore.Qt.DockWidgetArea(2),
                 self.properties)
@@ -112,8 +134,8 @@ class PPPMainWindow(QtGui.QMainWindow):
         self.connect(self.positionslider,
                      QtCore.SIGNAL("sliderMoved(int)"), self.setPosition)
 
-        self.playbutton = gui._getButton({'label':txt.PLAY})
-        self.stopbutton = gui._getButton({"label":txt.STOP})
+        self.playbutton = gui._getButton({'label':_fromUtf8(txt.PLAY)})
+        self.stopbutton = gui._getButton({"label":_fromUtf8(txt.STOP)})
 
         self.vlc_controls = QtGui.QHBoxLayout()
         self.vlc_controls.addWidget(self.playbutton)
@@ -151,14 +173,14 @@ class PPPMainWindow(QtGui.QMainWindow):
         """
         if self.mediaplayer.is_playing():
             self.mediaplayer.pause()
-            self.playbutton.setText("Play")
+            self.playbutton.setText(_fromUtf8("Play"))
             self.isPaused = True
         else:
             if self.mediaplayer.play() == -1:
                 self.OpenFile()
                 return
             self.mediaplayer.play()
-            self.playbutton.setText("Pause")
+            self.playbutton.setText(_fromUtf8("Pause"))
             self.timer.start()
             self.isPaused = False
 
@@ -166,7 +188,7 @@ class PPPMainWindow(QtGui.QMainWindow):
         """Stop player
         """
         self.mediaplayer.stop()
-        self.playbutton.setText("Play")
+        self.playbutton.setText(_fromUtf8("Play"))
 
     def OpenFile(self, filename=None):
         """Open a media file in a MediaPlayer

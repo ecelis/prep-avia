@@ -22,6 +22,21 @@ import qdarkstyle
 import txt, ico
 from PyQt4 import Qt, QtGui, QtCore
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+
 def _setGuiTheme(self, theme = 'dark'):
     """Sets PatitoPro GUI visual style"""
     if theme != 'dark':
@@ -31,12 +46,12 @@ def _setGuiTheme(self, theme = 'dark'):
 
 def _baseLayout(self):
     self.baseLayout = QtGui.QHBoxLayout()
-    self.baseLayout.setObjectName("baseLayout")
+    self.baseLayout.setObjectName(_fromUtf8("baseLayout"))
 
 def _initGui(self):
     """Initialize PatitoPro GUI"""
     _setGuiTheme(self)
-    self.setWindowTitle(txt.APP_TITLE)
+    self.setWindowTitle(_fromUtf8(txt.APP_TITLE))
     self.setWindowIcon(QtGui.QIcon(ico.PPP))
     _baseLayout(self)
 
