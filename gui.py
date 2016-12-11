@@ -19,7 +19,8 @@
 
 import sys
 import qdarkstyle
-import txt, ico
+from txt import txt
+import ico
 from PyQt4 import Qt, QtGui, QtCore
 
 try:
@@ -126,5 +127,3 @@ def _getButton(options):
     button = QtGui.QPushButton(options['label'])
     button.resize(button.minimumSizeHint())
     return button
-
-

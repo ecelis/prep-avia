@@ -22,7 +22,7 @@ import os.path
 from vlc import vlc
 from PyQt4 import Qt, QtGui, QtCore
 
-import txt
+from txt import txt
 import ico
 import gui
 
