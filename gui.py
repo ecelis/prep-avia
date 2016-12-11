@@ -33,6 +33,7 @@ try:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
+
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
@@ -47,6 +48,19 @@ def _setGuiTheme(self, theme = 'dark'):
 def _baseLayout(self):
     self.baseLayout = QtGui.QHBoxLayout()
     self.baseLayout.setObjectName(_fromUtf8("baseLayout"))
+
+def _explorerLayout(self):
+    self.explorerLayout = QtGui.QVBoxLayout()
+    self.explorerLayout.setObjectName(_fromUtf8("explorerLayout"))
+    self.fileBrowser = QtGui.QTreeView(self.dockWidgetContents)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
+            QtGui.QSizePolicy,Minimum)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(
+            self.fileBrowser.sizePolicy().hasHeightForWidth())
+    self.fileBrowser.setSizePolicy(sizePolicy)
+
 
 def _initGui(self):
     """Initialize PatitoPro GUI"""
