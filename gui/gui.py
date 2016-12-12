@@ -70,16 +70,16 @@ def _explorerLayout(self):
     model.setRootPath(QtCore.QDir.currentPath())
     self.fileBrowserView.setModel(model)
     ## Clipas
-    #self.projectClips = QtGui.QTableWidget(self.explorerContents)
-    #sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
-    #        QtGui.QSizePolicy.Minimum)
-    #sizePolicy.setHorizontalStretch(0)
-    #sizePolicy.setVerticalStretch(0)
-    #sizePolicy.setHeightForWidth(
-    #        self.projectClips.sizePolicy().hasHeightForWidth())
-    #self.projectClips.setSizePolicy(sizePolicy)
+    self.projectClips = QtGui.QTableWidget(self.propertiesContent)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
+            QtGui.QSizePolicy.Minimum)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(
+            self.projectClips.sizePolicy().hasHeightForWidth())
+    self.projectClips.setSizePolicy(sizePolicy)
     ##self.projectClips.setWidgetResizable(True)
-    #self.projectClips.setObjectName(_fromUtf8("projectClips"))
+    self.projectClips.setObjectName(_fromUtf8("projectClips"))
 
     #self.explorerLayout.addWidget(self.fileBrowserView)
     #self.explorerLayout.addWidget(self.projectClips)
