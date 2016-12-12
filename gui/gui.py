@@ -53,37 +53,6 @@ def _baseLayout(self):
     self.baseLayout = QtGui.QHBoxLayout()
     self.baseLayout.setObjectName(_fromUtf8("baseLayout"))
 
-def _explorerLayout(self):
-    self.explorerLayout = QtGui.QVBoxLayout()
-    self.explorerLayout.setObjectName(_fromUtf8("explorerLayout"))
-    ## File browser
-    self.fileBrowserView = QtGui.QTreeView(self.explorerContents)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
-            QtGui.QSizePolicy.Maximum)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
-            self.fileBrowserView.sizePolicy().hasHeightForWidth())
-    self.fileBrowserView.setSizePolicy(sizePolicy)
-    self.fileBrowserView.setObjectName(_fromUtf8("fileBrowserView"))
-    model = QtGui.QFileSystemModel(self.fileBrowserView)
-    model.setRootPath(QtCore.QDir.currentPath())
-    self.fileBrowserView.setModel(model)
-    ## Clipas
-    self.projectClips = QtGui.QTableWidget(self.propertiesContent)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
-            QtGui.QSizePolicy.Minimum)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
-            self.projectClips.sizePolicy().hasHeightForWidth())
-    self.projectClips.setSizePolicy(sizePolicy)
-    ##self.projectClips.setWidgetResizable(True)
-    self.projectClips.setObjectName(_fromUtf8("projectClips"))
-
-    #self.explorerLayout.addWidget(self.fileBrowserView)
-    #self.explorerLayout.addWidget(self.projectClips)
-
 def _initGui(self):
     """Initialize PatitoPro GUI"""
     _setGuiTheme(self)

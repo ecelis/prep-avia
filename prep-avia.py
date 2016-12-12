@@ -21,10 +21,9 @@ import sys
 import os.path
 from vlc import vlc
 from PyQt4 import Qt, QtGui, QtCore
-
+import qdarkstyle
 from txt import txt
-from gui import ico, gui, short
-#from gui import gui
+from gui import ico, short
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -46,7 +45,10 @@ class MainWindow(QtGui.QMainWindow):
     def __init__(self, master=None):
         super(MainWindow, self).__init__()
         QtGui.QMainWindow.__init__(self, master)
-        gui._initGui(self)
+        self._setGuiTheme()
+        #self._setFont()
+        self.setWindowTitle(_fromUtf8(txt.APP_TITLE))
+        self.setWindowIcon(QtGui.QIcon(ico.PPP))
         # creating a basic vlc instansce
         self.instance = vlc.Instance()
         # creating an empty vlc media player
@@ -54,10 +56,63 @@ class MainWindow(QtGui.QMainWindow):
         self.createUI()
         self.isPaused = False
 
+    def _setGuiTheme(self, theme = 'dark'):
+        """Sets PatitoPro GUI visual style"""
+        if theme != 'dark':
+            pass
+        else:
+            self.setStyleSheet(qdarkstyle.load_stylesheet(pyside = False))
+
+    def _setFont(self, target, style):
+        pass
+
+    def _baseLayout(self):
+        self.baseLayout = QtGui.QHBoxLayout()
+        self.baseLayout.setObjectName(_fromUtf8("baseLayout"))
+
+    def _getVideoWidget(self):
+        """In this widget, the video will be drawn"""
+        videoframe = None
+        if sys.platform == "darwin": # for MacOS
+            videoframe = QtGui.QMacCocoaViewContainer(0)
+        else:
+            videoframe = QtGui.QFrame()
+
+        palette = videoframe.palette()
+        palette.setColor (QtGui.QPalette.Window,
+                                   QtGui.QColor(0,0,0))
+        videoframe.setPalette(palette)
+        videoframe.setAutoFillBackground(True)
+
+        return videoframe
+
+    def _getTimeLine():
+        if sys.platform == "darwin":
+            timeline = QtGui.QMacCocoaViewContainer(0)
+        else:
+            timeline = QtGui.QScrollArea()
+            timeline.setFrameStyle(QtGui.QFrame.StyledPanel)
+            timeline.setFrameStyle(QtGui.QFrame.Sunken)
+            timeline.setGeometry(QtCore.QRect(0,0,200,200))
+
+        return timeline
+
+    def _getSliderWidget(self, options):
+        """Returns a slider"""
+        slider = QtGui.QSlider(options['orientation'], self)
+        slider.setToolTip(options['tooltip'])
+        slider.setMaximum(options['max'])
+        return slider
+
+    def _getButton(self, options):
+        button = QtGui.QPushButton(options['label'])
+        button.resize(button.minimumSizeHint())
+        return button
+
     def createUI(self):
         """Set up the user interface, signals & slots
         """
-        self.videoframe = gui._getVideoWidget()
+        self.videoframe = self._getVideoWidget()
         self.menu()
         self.toolBar()
         self.statusBar()
@@ -99,14 +154,39 @@ class MainWindow(QtGui.QMainWindow):
         self.explorer = QtGui.QDockWidget(self)
         self.explorer.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
         self.explorer.setObjectName(_fromUtf8("explorer"))
-        self.explorerContents = QtGui.QWidget()
-        self.explorerContents.setObjectName(
+        self.explorerContent = QtGui.QWidget()
+        self.explorerContent.setObjectName(
                 _fromUtf8("explorerContents"))
-        self.explorer.setWidget(self.explorerContents)
+        self.explorer.setWidget(self.explorerContent)
         self.addDockWidget(QtCore.Qt.DockWidgetArea(1),
                 self.explorer)
-        gui._explorerLayout(self)
-
+        # Explorer Layout
+        self.explorerLayout = QtGui.QVBoxLayout()
+        self.explorerLayout.setObjectName(_fromUtf8("explorerLayout"))
+        ## File browser
+        self.fileBrowserView = QtGui.QTreeView(self.explorerContent)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
+                QtGui.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+                self.fileBrowserView.sizePolicy().hasHeightForWidth())
+        self.fileBrowserView.setSizePolicy(sizePolicy)
+        self.fileBrowserView.setObjectName(_fromUtf8("fileBrowserView"))
+        model = QtGui.QFileSystemModel(self.fileBrowserView)
+        model.setRootPath(QtCore.QDir.currentPath())
+        self.fileBrowserView.setModel(model)
+        ## Clips
+        self.projectClips = QtGui.QTableWidget(self.explorerContent)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
+                QtGui.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+                self.projectClips.sizePolicy().hasHeightForWidth())
+        self.projectClips.setSizePolicy(sizePolicy)
+        ##self.projectClips.setWidgetResizable(True)
+        self.projectClips.setObjectName(_fromUtf8("projectClips"))
 
     def propertiesWidget(self):
         self.properties = QtGui.QDockWidget(self)
@@ -124,12 +204,12 @@ class MainWindow(QtGui.QMainWindow):
         # Player Controls
         ps_config = dict(orientation = QtCore.Qt.Horizontal,
                 tooltip = 'Position', max = 1000)
-        self.positionslider = gui._getSliderWidget(self, ps_config)
+        self.positionslider = self._getSliderWidget(ps_config)
         self.connect(self.positionslider,
                      QtCore.SIGNAL("sliderMoved(int)"), self.setPosition)
 
-        self.playbutton = gui._getButton({'label':_fromUtf8(txt.PLAY)})
-        self.stopbutton = gui._getButton({"label":_fromUtf8(txt.STOP)})
+        self.playbutton = self._getButton({'label':_fromUtf8(txt.PLAY)})
+        self.stopbutton = self._getButton({"label":_fromUtf8(txt.STOP)})
 
         self.vlc_controls = QtGui.QHBoxLayout()
         self.vlc_controls.addWidget(self.playbutton)
@@ -140,7 +220,7 @@ class MainWindow(QtGui.QMainWindow):
                      self.Stop)
 
         self.vlc_controls.addStretch(1)
-        self.volumeslider = gui._getSliderWidget(self,
+        self.volumeslider = self._getSliderWidget(
                 {'orientation':QtCore.Qt.Horizontal,
                 'tooltip':'Volume',
                 'max':100})
