@@ -38,13 +38,16 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-
 def _setGuiTheme(self, theme = 'dark'):
     """Sets PatitoPro GUI visual style"""
     if theme != 'dark':
         pass
     else:
         self.setStyleSheet(qdarkstyle.load_stylesheet(pyside = False))
+        #pass
+
+def _setFont(self, target, style):
+    pass
 
 def _baseLayout(self):
     self.baseLayout = QtGui.QHBoxLayout()
@@ -54,30 +57,32 @@ def _explorerLayout(self):
     self.explorerLayout = QtGui.QVBoxLayout()
     self.explorerLayout.setObjectName(_fromUtf8("explorerLayout"))
     ## File browser
-    self.fileBrowserView = QtGui.QTreeWidget(self.explorerContents)
+    self.fileBrowserView = QtGui.QTreeView(self.explorerContents)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
-            QtGui.QSizePolicy.Minimum)
+            QtGui.QSizePolicy.Maximum)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(
             self.fileBrowserView.sizePolicy().hasHeightForWidth())
     self.fileBrowserView.setSizePolicy(sizePolicy)
     self.fileBrowserView.setObjectName(_fromUtf8("fileBrowserView"))
-
-
+    model = QtGui.QFileSystemModel(self.fileBrowserView)
+    model.setRootPath(QtCore.QDir.currentPath())
+    self.fileBrowserView.setModel(model)
     ## Clipas
-    self.projectClips = QtGui.QTableWidget(self.explorerContents)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
-            QtGui.QSizePolicy.Minimum)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
-            self.projectClips.sizePolicy().hasHeightForWidth())
-    self.projectClips.setSizePolicy(sizePolicy)
-#    self.projectClips.setWidgetResizable(True)
-    self.projectClips.setObjectName(_fromUtf8("projectClips"))
-    self.explorerLayout.addWidget(self.projectClips)
+    #self.projectClips = QtGui.QTableWidget(self.explorerContents)
+    #sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
+    #        QtGui.QSizePolicy.Minimum)
+    #sizePolicy.setHorizontalStretch(0)
+    #sizePolicy.setVerticalStretch(0)
+    #sizePolicy.setHeightForWidth(
+    #        self.projectClips.sizePolicy().hasHeightForWidth())
+    #self.projectClips.setSizePolicy(sizePolicy)
+    ##self.projectClips.setWidgetResizable(True)
+    #self.projectClips.setObjectName(_fromUtf8("projectClips"))
 
+    #self.explorerLayout.addWidget(self.fileBrowserView)
+    #self.explorerLayout.addWidget(self.projectClips)
 
 def _initGui(self):
     """Initialize PatitoPro GUI"""
@@ -85,9 +90,6 @@ def _initGui(self):
     self.setWindowTitle(_fromUtf8(txt.APP_TITLE))
     self.setWindowIcon(QtGui.QIcon(ico.PPP))
     _baseLayout(self)
-
-def _setFont(self, target, style):
-    pass
 
 def _getVideoWidget():
     """In this widget, the video will be drawn"""
@@ -127,3 +129,6 @@ def _getButton(options):
     button = QtGui.QPushButton(options['label'])
     button.resize(button.minimumSizeHint())
     return button
+
+def _browseDirectory(path):
+    return os.path.expanduser('~')

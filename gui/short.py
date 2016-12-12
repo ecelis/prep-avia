@@ -17,13 +17,5 @@
 ##     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-APP_TITLE = 'Prep - PatitoPro'
-PLAY = "Play"
-OPEN_PROJECT = "&Open"
-PLAY = "Play"
-PAUSE = "Pause"
-STOP = "Stop"
-
-## Menu
-MENU_EXIT = "&Exit"
-MENU_OPEN_PROJECT = "&File"
+OPEN_PROJECT = "Ctrl+O"
+QUIT = "Ctrl+Q"

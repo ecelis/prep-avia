@@ -23,7 +23,7 @@ from vlc import vlc
 from PyQt4 import Qt, QtGui, QtCore
 
 from txt import txt
-from gui import ico, gui
+from gui import ico, gui, short
 #from gui import gui
 
 try:
@@ -39,7 +39,6 @@ try:
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
-
 
 class MainWindow(QtGui.QMainWindow):
     """A simple Media Player using VLC and Qt
@@ -74,14 +73,14 @@ class MainWindow(QtGui.QMainWindow):
 
     def menu(self):
         self.open = QtGui.QAction(QtGui.QIcon(ico.OPEN_PROJECT),
-                txt.OPEN_PROJECT, self)
-        self.open.setShortcut("Ctrl+O")
+                _fromUtf8(txt.OPEN_PROJECT), self)
+        self.open.setShortcut(short.OPEN_PROJECT)
         self.connect(self.open, QtCore.SIGNAL("triggered()"), self.OpenFile)
-        exit = QtGui.QAction("&Exit", self)
-        exit.setShortcut("Ctrl+Q")
+        exit = QtGui.QAction(txt.MENU_EXIT, self)
+        exit.setShortcut(short.QUIT)
         self.connect(exit, QtCore.SIGNAL("triggered()"), sys.exit)
         menubar = self.menuBar()
-        filemenu = menubar.addMenu("&File")
+        filemenu = menubar.addMenu(txt.MENU_OPEN_PROJECT)
         filemenu.addAction(self.open)
         filemenu.addSeparator()
         filemenu.addAction(exit)
@@ -94,12 +93,6 @@ class MainWindow(QtGui.QMainWindow):
         self.statusbar = QtGui.QStatusBar(self)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         self.setStatusBar(self.statusbar)
-
-    def fileBrowser(self):
-        pass
-
-    def projectClips(self):
-        pass
 
     def explorerWidget(self):
         """File and project explorer dock panel"""
@@ -114,6 +107,7 @@ class MainWindow(QtGui.QMainWindow):
                 self.explorer)
         gui._explorerLayout(self)
 
+
     def propertiesWidget(self):
         self.properties = QtGui.QDockWidget(self)
         self.properties.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
@@ -123,7 +117,6 @@ class MainWindow(QtGui.QMainWindow):
         self.properties.setWidget(self.propertiesContent)
         self.addDockWidget(QtCore.Qt.DockWidgetArea(2),
                 self.properties)
-
 
     def vlcp(self):
         """Create the main vlc player widget"""
@@ -157,15 +150,12 @@ class MainWindow(QtGui.QMainWindow):
                      QtCore.SIGNAL("valueChanged(int)"),
                      self.setVolume)
 
-        self.timeline = gui._getTimeLine()
-
-
+        # TODO self.timeline = gui._getTimeLine()
         self.vlc_layout = QtGui.QVBoxLayout()
         self.vlc_layout.addWidget(self.videoframe)
         self.vlc_layout.addWidget(self.positionslider)
         self.vlc_layout.addLayout(self.vlc_controls)
         #self.vlc_layout.addWidget(self.timeline)
-
         self.vlcplayer.setLayout(self.vlc_layout)
 
 
@@ -174,14 +164,14 @@ class MainWindow(QtGui.QMainWindow):
         """
         if self.mediaplayer.is_playing():
             self.mediaplayer.pause()
-            self.playbutton.setText(_fromUtf8("Play"))
+            self.playbutton.setText(_fromUtf8(txt.PLAY))
             self.isPaused = True
         else:
             if self.mediaplayer.play() == -1:
                 self.OpenFile()
                 return
             self.mediaplayer.play()
-            self.playbutton.setText(_fromUtf8("Pause"))
+            self.playbutton.setText(_fromUtf8(txt.PAUSE))
             self.timer.start()
             self.isPaused = False
 
@@ -189,7 +179,7 @@ class MainWindow(QtGui.QMainWindow):
         """Stop player
         """
         self.mediaplayer.stop()
-        self.playbutton.setText(_fromUtf8("Play"))
+        self.playbutton.setText(_fromUtf8(txt.PLAY))
 
     def OpenFile(self, filename=None):
         """Open a media file in a MediaPlayer
