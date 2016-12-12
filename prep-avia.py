@@ -49,6 +49,7 @@ class MainWindow(QtGui.QMainWindow):
         #self._setFont()
         self.setWindowTitle(_fromUtf8(txt.APP_TITLE))
         self.setWindowIcon(QtGui.QIcon(ico.PPP))
+        self.resize(800, 600)
         # creating a basic vlc instansce
         self.instance = vlc.Instance()
         # creating an empty vlc media player
@@ -155,29 +156,36 @@ class MainWindow(QtGui.QMainWindow):
         self.explorer.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
         self.explorer.setObjectName(_fromUtf8("explorer"))
         self.explorerContent = QtGui.QWidget()
-        self.explorerContent.setObjectName(
-                _fromUtf8("explorerContents"))
-        self.explorer.setWidget(self.explorerContent)
-        self.addDockWidget(QtCore.Qt.DockWidgetArea(1),
-                self.explorer)
+        self.explorerContent.setObjectName(_fromUtf8("explorerContent"))
         # Explorer Layout
-        self.explorerLayout = QtGui.QVBoxLayout()
+        self.explorerLayout = QtGui.QVBoxLayout(self.explorerContent)
         self.explorerLayout.setObjectName(_fromUtf8("explorerLayout"))
         ## File browser
         self.fileBrowserView = QtGui.QTreeView(self.explorerContent)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
-                QtGui.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-                self.fileBrowserView.sizePolicy().hasHeightForWidth())
-        self.fileBrowserView.setSizePolicy(sizePolicy)
         self.fileBrowserView.setObjectName(_fromUtf8("fileBrowserView"))
+        self.explorerLayout.addWidget(self.fileBrowserView)
         model = QtGui.QFileSystemModel(self.fileBrowserView)
         model.setRootPath(QtCore.QDir.currentPath())
         self.fileBrowserView.setModel(model)
+        self.projectClips = QtGui.QTableWidget(self.explorerContent)
+        self.projectClips.setObjectName(_fromUtf8("projectClips"))
+        self.explorerLayout.addWidget(self.projectClips)
+        self.explorer.setWidget(self.explorerContent)
+        #self.addDockWidget(QtCore.Qt.DockWidgetArea(1),
+#                self.explorer)
+
+
+        # sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
+        #         QtGui.QSizePolicy.Minimum)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
+        # # sizePolicy.setHeightForWidth(
+        #         self.fileBrowserView.sizePolicy().hasHeightForWidth())
+        # self.fileBrowserView.setSizePolicy(sizePolicy)
+
+
         ## Clips
-        # self.projectClips = QtGui.QTableWidget(self.explorerContent)
+        #
         # sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
         #         QtGui.QSizePolicy.Maximum)
         # sizePolicy.setHorizontalStretch(0)
@@ -186,7 +194,7 @@ class MainWindow(QtGui.QMainWindow):
         #         self.projectClips.sizePolicy().hasHeightForWidth())
         # self.projectClips.setSizePolicy(sizePolicy)
         # ##self.projectClips.setWidgetResizable(True)
-        # self.projectClips.setObjectName(_fromUtf8("projectClips"))
+        #
 
     def propertiesWidget(self):
         self.properties = QtGui.QDockWidget(self)
