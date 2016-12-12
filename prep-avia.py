@@ -177,16 +177,16 @@ class MainWindow(QtGui.QMainWindow):
         model.setRootPath(QtCore.QDir.currentPath())
         self.fileBrowserView.setModel(model)
         ## Clips
-        self.projectClips = QtGui.QTableWidget(self.explorerContent)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
-                QtGui.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-                self.projectClips.sizePolicy().hasHeightForWidth())
-        self.projectClips.setSizePolicy(sizePolicy)
-        ##self.projectClips.setWidgetResizable(True)
-        self.projectClips.setObjectName(_fromUtf8("projectClips"))
+        # self.projectClips = QtGui.QTableWidget(self.explorerContent)
+        # sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
+        #         QtGui.QSizePolicy.Maximum)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setHeightForWidth(
+        #         self.projectClips.sizePolicy().hasHeightForWidth())
+        # self.projectClips.setSizePolicy(sizePolicy)
+        # ##self.projectClips.setWidgetResizable(True)
+        # self.projectClips.setObjectName(_fromUtf8("projectClips"))
 
     def propertiesWidget(self):
         self.properties = QtGui.QDockWidget(self)
