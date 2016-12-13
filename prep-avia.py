@@ -167,11 +167,25 @@ class MainWindow(QtGui.QMainWindow):
         model = QtGui.QFileSystemModel(self.fileBrowserView)
         model.setRootPath(QtCore.QDir.currentPath())
         self.fileBrowserView.setModel(model)
+        # QtCore.QObject.connect(self.fileBrowserView.selectionModel(),
+        #     QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)'),
+        #     self.test)
+        self.fileBrowserView.doubleClicked.connect(self.addClip2Project)
         ## Projet clips
         self.projectClips = QtGui.QTableWidget(self.explorerContent)
         self.projectClips.setObjectName(_fromUtf8("projectClips"))
         self.explorerLayout.addWidget(self.projectClips)
         self.explorer.setWidget(self.explorerContent)
+
+    #@QtCore.pyqtSlot("QItemSelection, QItemSelection")
+    # def test(self, selected, deselected):
+    #     print("Hello")
+    #     print(selected)
+    #     print(deselected)
+    def addClip2Project(self, index):
+        item = self.fileBrowserView.selectedIndexes()[0]
+        print (self.fileBrowserView.selectedIndexes())
+        print item.model().fileName(index)
 
     def propertiesWidget(self):
         self.properties = QtGui.QDockWidget(self)
